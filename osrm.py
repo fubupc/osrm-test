@@ -104,13 +104,13 @@ class OSRMRunner(object):
 
     def osrm_extract(self):
         logging.info("Running osrm-extract ...")
-        cmd = "osrm-extract %s -p %s" % (self.osm_symlink, self.speed_profile)
+        cmd = "%s %s -p %s" % (self.bin_osrm_extract, self.osm_symlink, self.speed_profile)
         subprocess.check_call(cmd, cwd=self.working_dir, shell=True)
         logging.info("--- Completed osrm-extract ---")
 
     def osrm_contract(self):
         logging.info("Running osrm-contract ...")
-        cmd = "osrm-contract %s" % (self.osrm_filename,)
+        cmd = "%s %s" % (self.bin_osrm_contract, self.osrm_filename,)
         subprocess.check_call(cmd, cwd=self.working_dir, shell=True)
         logging.info("--- Completed osrm-contract ---")
 
@@ -122,7 +122,7 @@ class OSRMRunner(object):
             return
 
         logging.info("Launching OSRM server...")
-        self.server_popen = subprocess.Popen(['osrm-routed', '-p', str(self.port), self.osrm_filename],
+        self.server_popen = subprocess.Popen([self.bin_osrm_routed, '-p', str(self.port), self.osrm_filename],
                                              cwd=self.working_dir)
         time.sleep(5)  # waiting for intialization of osrm-routed.
 
